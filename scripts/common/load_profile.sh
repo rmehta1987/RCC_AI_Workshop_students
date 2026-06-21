@@ -31,7 +31,6 @@ export MEDMNIST_ROOT="${MEDMNIST_ROOT:-$PROJECT_DIR/caches/medmnist}"
 export TORCH_HOME="${TORCH_HOME:-$PROJECT_DIR/caches/torch}"
 export HF_HUB_ENABLE_HF_TRANSFER="${HF_HUB_ENABLE_HF_TRANSFER:-1}"
 export RCC_ACCOUNT="${RCC_ACCOUNT:-rcc-staff}"
-export GPU_PARTITION="${GPU_PARTITION:-test}"
 export CPU_PARTITION="${CPU_PARTITION:-caslake}"
 
 # `module purge` unsets $SOFTPATH, after which Midway3 modulefiles deref an empty

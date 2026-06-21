@@ -1,16 +1,15 @@
 #!/bin/bash
-# Launch Jupyter Lab on a Midway3 GPU node with the shared 'aimed' kernel.
+# Launch Jupyter Lab on a Midway3 CPU (caslake) node with the shared 'aimed' kernel.
 #   sbatch slurm/launch_jupyter.sbatch        # then read logs/jupyter-<cnetid>-<jobid>.log
 #SBATCH --job-name=aimed-jupyter
-#SBATCH --account=workshop-aiml
-#SBATCH --partition=gpu
-#SBATCH --gres=gpu:1
+#SBATCH --account=rcc-staff
+#SBATCH --partition=caslake
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
 #SBATCH --time=04:00:00
 #SBATCH --output=logs/jupyter-%u-%j.log
 set -uo pipefail
-cd "${SLURM_SUBMIT_DIR:-/project/workshop-aiml/ai_medicine_genomics}"
+cd "${SLURM_SUBMIT_DIR:-/project/rcc/mehta5/AI_Workshop}"
 source scripts/common/load_profile.sh
 aimed_activate
 
@@ -23,7 +22,7 @@ cat <<EOF
 
 ============================================================================
   AImed Jupyter Lab
-  node=$NODE   port=$PORT   kernel='AImed (shared GPU/CPU)'   GPU=$(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null | head -1)
+  node=$NODE   port=$PORT   kernel='AImed'
 
   On YOUR LAPTOP, open an SSH tunnel:
       ssh -N -L ${PORT}:${NODE}:${PORT} ${USER}@midway3.rcc.uchicago.edu

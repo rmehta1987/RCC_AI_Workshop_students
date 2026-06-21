@@ -23,32 +23,13 @@ unlock upgrades. Nothing here is required to clear any mastery gate.
 The **genomic path needs no key** — HyenaDNA and Evo 2 run locally from the shared
 HF cache.
 
-## Recommended: drive the agent with the local vLLM (no OpenAI key) — turnkey
+## Driving the agent with a real LLM (optional, no GPU)
 
-One shared GPU server for the whole cohort, using your `marshal_env_torch260_vllm084.sif`
-(vLLM 0.8.4) + the cached **Qwen3-4B** (fits any GPU, reliable JSON tool-calls):
-
-```bash
-# instructor: start the shared server (self-tests the agent, then keeps serving)
-sbatch slurm/serve_vllm_agent.sbatch
-cat logs/vllm-agent-<jobid>.log        # shows the endpoint + the self-test transcript
-
-# anyone (same node, or with the printed HOST / a tunnel): point the agent at it
-source logs/vllm_endpoint.env          # sets OPENAI_BASE_URL / AIMED_LLM_MODEL / OPENAI_API_KEY=EMPTY
-python scripts/minimal_cxr_agent.py --backend openai     # now driven by Qwen3-4B
-```
-
-Swap the model with `AIMED_VLLM_MODEL=Qwen2.5-Coder-32B-Instruct sbatch ...` (needs a
-≥40 GB card — use the **beagle3** partition). The agent's JSON extraction strips Qwen3
-`<think>` blocks and falls back to the offline MockLLM if the endpoint is unreachable,
-so a flaky server never breaks the gate.
-
-> **Note (answers "can we do Module 3 with vLLM?")** vLLM serves the *agent's*
-> LLM controller (Module 3b) beautifully. It **cannot** serve the *genomic* models
-> (Module 3 / Day 2): vLLM supports Transformer + Mamba/SSM architectures, but
-> **HyenaDNA and Evo 2 are Hyena/StripedHyena models that vLLM does not implement**,
-> and the VEP task needs prompt log-likelihoods, not generation. For Day-2 scale,
-> use the shared HF cache + the precomputed score table instead.
+The Day-1 agent (Module 3b) runs offline on the **MockLLM** by default. To use a real LLM instead, point
+it at any OpenAI-compatible endpoint — a hosted API or a local Ollama — by setting `OPENAI_BASE_URL` +
+`OPENAI_API_KEY`, then `python scripts/minimal_cxr_agent.py --backend openai`. The agent falls back to the
+MockLLM if the endpoint is unreachable, so this never blocks the module. *(No GPU is involved — the
+genomic models don't run through an LLM server; Day-2 uses the precomputed score tables.)*
 
 ## Gated weights
 

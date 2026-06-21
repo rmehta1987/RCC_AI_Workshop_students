@@ -29,13 +29,12 @@ bash scripts/setup_user_secrets.sh        # safe to skip; the agent works offlin
 > `students/<cnetid>/` folder so you keep getting updates.)
 
 In Jupyter, open your `students/<cnetid>/notebooks/day1_m1_clinical_risk.ipynb`, pick the
-**`AImed (shared GPU/CPU)`** kernel, and work each module top-to-bottom. (The `sbatch` path drops you at
+**`AImed`** kernel, and work each module top-to-bottom. (The `sbatch` path drops you at
 the read-only course root — just navigate into your `students/<cnetid>/notebooks/` folder.) Stuck on a
 step? Run the **CHECKPOINT** cell — it shows the answer so you can keep moving.
 
-**No GPU?** The whole course runs on **CPU** — in OnDemand pick partition `caslake` with `0` GPUs
-(account `workshop-aiml`). No API key is needed (the Day-1 agent uses an offline mock LLM); model
-weights come from the shared cache.
+The whole course runs on **CPU** (partition `caslake`, account `workshop-aiml`) — no GPU needed. No API
+key is needed either (the Day-1 agent uses an offline mock LLM); model weights come from the shared cache.
 
 ## Module map
 
@@ -92,8 +91,6 @@ You can also use your local computer as the whole course runs on a **CPU**.
 | Symptom | Fix |
 |---|---|
 | **`AImed` kernel missing** | `export JUPYTER_PATH=$PROJECT_DIR/env/share/jupyter` then restart Jupyter; confirm `ls $PROJECT_DIR/env/share/jupyter/kernels` shows `aimed`. |
-| **`torch.cuda.is_available()` is False** | You're on a CPU node — totally fine. Day 2: use small `--n`/window, or the precomputed table. |
-| **GPU partition busy** | HyenaDNA runs on **CPU**; or submit to `caslake`. The whole course works without a GPU. |
 | **`module: wrong # args ... SOFTPATH`** | You ran `module purge` — don't. Open a fresh shell; use `module unload <name>` instead. |
 | **Quota / disk full** | Don't write to `$HOME`. Write outputs under your own `/scratch/midway3/$USER`. |
 | **No OpenAI key for the agent** | Nothing to do — the agent uses the offline MockLLM and the gate still passes. |
@@ -101,10 +98,9 @@ You can also use your local computer as the whole course runs on a **CPU**.
 | **HyenaDNA download attempt on a compute node** | You're offline on a compute node (correct). Weights are in the shared cache; `cfg.setup_caches()` (run by the notebook bootstrap) points there. |
 | **`run_vep` is slow on CPU** | Use `--use-precomputed`, or a smaller `--n` and `--window 1024`. |
 
-## Etiquette (shared GPUs)
+## Etiquette (shared compute)
 
-One GPU session per student; `scancel <jobid>` idle sessions. Use the precomputed
-BRCA1 table instead of re-scoring 7,786 windows. Right-size `--time`. Check yourself
-with `squeue --me`.
+`scancel <jobid>` idle sessions. Use the precomputed BRCA1 table instead of
+re-scoring 7,786 windows. Right-size `--time`. Check yourself with `squeue --me`.
 
 *(More detail: `docs/JUPYTER.md`, `docs/SECRETS.md`. Profile / config: `CLUSTER_PROFILE.md`.)*
