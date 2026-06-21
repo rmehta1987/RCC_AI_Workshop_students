@@ -1,9 +1,6 @@
 # Student README — get into a working notebook in ~5 minutes
 
-You are in the **AI in Medicine & Genomics** two-day course on UChicago RCC
-**Midway3**. Everything is pre-installed and pre-staged. No downloads, no setup.
-
-## The 5 must-do steps (on Midway3)
+## Steps for midway3
 
 ```bash
 # 1. SSH in
@@ -17,7 +14,7 @@ source scripts/common/load_profile.sh && aimed_activate
 python -c "import torch, transformers; print('env OK')"
 
 # 4. (optional) secrets — ONLY if your team uses an LLM endpoint for the agent
-bash scripts/setup_user_secrets.sh        # safe to skip; the agent works offline
+bash scripts/setup_user_secrets.sh        # safe to skip; the agent works offline 
 
 # 5. Launch Jupyter and open Day 1
 #    Easiest: Open OnDemand  ->  https://midway3.rcc.uchicago.edu  (see docs/JUPYTER.md)
@@ -51,7 +48,7 @@ weights come from the shared cache.
 
 ## Run it locally (CPU-only laptop)
 
-Not on Midway3? The whole course runs on a **CPU** — no GPU, no special kernel.
+You can also use your local computer as the whole course runs on a **CPU**.
 
 1. **Code + small data** — `git clone` ships the course code **and** the small, non-PHI data the
    notebooks read (the diabetes table, `brca1_variants.csv`, both real precomputed VEP tables —
