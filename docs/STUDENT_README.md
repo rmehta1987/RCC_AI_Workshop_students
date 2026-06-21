@@ -58,18 +58,13 @@ You can also use your local computer as the whole course runs on a **CPU**.
    python3.11 -m venv .venv && source .venv/bin/activate
    pip install -r requirements-cpu.txt          # CPU PyTorch + the course stack
    ```
-2. **First-run downloads** — **HyenaDNA-small** downloads automatically the first time Day-2 uses it
-   (one-time, internet). **MedMNIST does *not* auto-download:** on a fresh clone Day-1 M2 runs on the
-   bundled **synthetic smoke fixture** (fine for the Grad-CAM and OOD lessons — the OOD demo also uses
-   generated noise + flipped scans). *(Optional)* for the **real** chest X-rays, pre-fetch once from the
-   repo root:
+2. **Download the Day-1 chest X-rays** (PneumoniaMNIST, ~20 MB — takes a few seconds). Run once from
+   the repo root:
    ```bash
    python -c "from medmnist import PneumoniaMNIST; [PneumoniaMNIST(split=s, download=True, size=64, root='caches/medmnist') for s in ('train','val','test')]"
    ```
-   (The OOD demo's extra "other-finding CXR" example also wants `ChestMNIST` — append it to that line —
-   but it's 383 MB and optional; the OOD lesson works without it.) The 22 MB chr17 reference is **not**
-   needed (Day-2 uses the precomputed scoring path); grab it from `aimed_datasets_bundle.tar.gz` only if
-   you want to score variants with a model live.
+   Day-2's **HyenaDNA-small** model then downloads automatically the first time you open that notebook.
+   (The 22 MB chr17 reference isn't needed — Day-2 reads the precomputed score tables.)
 3. **Launch** with the one-command helper. It starts JupyterLab **in the background**, opens your
    browser, and **gives your terminal right back** — there's no server window to keep open or quit:
    ```bash
