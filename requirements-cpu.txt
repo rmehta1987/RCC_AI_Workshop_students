@@ -1,0 +1,53 @@
+# requirements-cpu.txt — run the "AI in Medicine & Genomics" course on a CPU-only machine.
+#
+#   python3.11 -m venv .venv && source .venv/bin/activate     # (conda also fine)
+#   pip install -r requirements-cpu.txt
+#
+# The ENTIRE course runs on CPU. Evo 2 / a GPU / flash-attn are NOT needed — the
+# frontier Evo 2 results ship as a precomputed table the notebooks read.
+# You still need the data/weights (see docs/STUDENT_README.md "Run it locally").
+
+# --- PyTorch, CPU build (the one gotcha: do NOT install the default CUDA wheel) ---
+# Linux/Windows: the '+cpu' pins + the index below fetch the lean CPU wheel.
+# macOS: delete the next 3 lines and instead run `pip install torch==2.6.0 torchvision==0.21.0`
+#        (PyPI already ships CPU/MPS builds for Mac).
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.6.0+cpu
+torchvision==0.21.0+cpu
+
+# --- core scientific stack ---
+numpy
+pandas
+scipy
+scikit-learn==1.5.2
+matplotlib==3.9.4
+
+# --- models + image data (HyenaDNA loads via transformers; MedMNIST supplies the X-rays) ---
+transformers==4.46.3
+tokenizers>=0.20,<0.21
+einops>=0.8,<0.9
+huggingface_hub>=0.26,<0.30
+hf_transfer>=0.1.8            # fast Rust downloader; aimed_config enables it only when present
+safetensors>=0.4.5
+medmnist==3.0.2
+Pillow>=10.3
+
+# --- Day-2 genomics helpers (FASTA / variant handling) ---
+biopython>=1.84
+pyfaidx>=0.8
+
+# --- Jupyter + interactive widgets (ipympl powers the Day-1 Module-1 threshold slider) ---
+jupyterlab>=4.2,<5
+notebook>=7.2,<8
+ipykernel>=6.29
+ipywidgets>=8.1
+ipympl>=0.9,<0.10
+nbconvert>=7.16
+nbclient>=0.10
+tqdm>=4.66
+
+# --- OPTIONAL extras (uncomment only if you want the specific feature) ---
+# grad-cam>=1.5,<1.6   # Module-3b agent's REAL Grad-CAM tool; the default stub tools work without it
+# openai>=1.40,<2      # a LIVE LLM endpoint for the Module-3b agent; the offline MockLLM is the default
+# shap>=0.46           # Module-1 SHAP stretch task
+# seaborn>=0.13        # optional nicer plots

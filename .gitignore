@@ -1,0 +1,32 @@
+# Local Python env (created by run_local.sh / venv)
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Secrets — never commit
+.env
+*.env
+*.key
+*token*
+.config/
+
+# Heavy assets that are downloaded/generated, never committed
+caches/
+logs/
+students/
+repos/
+*.tar.gz
+
+# Large raw / reference data the small course does NOT need
+# (model weights, the 22MB chr17 reference, raw spreadsheets, prokaryote extras)
+data/day2_genomics/GRCh37.p13_chr17.fna.gz
+data/day2_genomics/*.xlsx
+data/day2_genomics/seqmodeling_extras/ecoli_NC_000913.gb
+data/day2_genomics/seqmodeling_extras/samplePositions.tsv
+
+# OS cruft
+.DS_Store
