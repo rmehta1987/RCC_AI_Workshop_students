@@ -10,7 +10,11 @@ runs on a **laptop CPU** (no GPU required) or on the UChicago RCC **Midway3** cl
 ## Quickstart — run it locally (CPU-only laptop)
 
 ```bash
+# HTTPS (no SSH key needed):
+git clone https://github.com/rmehta1987/RCC_AI_Workshop_students.git
+# …or SSH (if you have a key on your GitHub account):
 git clone git@github.com:rmehta1987/RCC_AI_Workshop_students.git
+
 cd RCC_AI_Workshop_students
 python3.11 -m venv .venv && source .venv/bin/activate
 pip install -r requirements-cpu.txt
