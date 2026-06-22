@@ -101,6 +101,26 @@ def run_report(missing_frac=0.3, log=print):
     return {"aurocs": aurocs, "missing": drills, "missing_frac": missing_frac}
 
 
+def make_paired_multimodal(n=600, dz=12, d_img=512, d_tab=8, noise=0.6, seed=0):
+    """Synthetic but HONESTLY paired multimodal data for the CLIP submodule (3a').
+
+    One latent vector per patient drives BOTH views through different random projections,
+    so img[i] and tab[i] genuinely correspond -> contrastive alignment has real signal to
+    learn (unlike multimodal_smoke.npz, whose modalities share only the label). Synthetic
+    by construction and labelled as such, exactly like the late-fusion teaching set.
+    Returns img (n, d_img), tab (n, d_tab), y (n,).
+    """
+    rng = np.random.default_rng(seed)
+    Z = rng.standard_normal((n, dz)).astype("float32")            # per-patient latent
+    Wi = rng.standard_normal((dz, d_img)).astype("float32")
+    Wt = rng.standard_normal((dz, d_tab)).astype("float32")
+    img = Z @ Wi + noise * rng.standard_normal((n, d_img)).astype("float32")
+    tab = Z @ Wt + noise * rng.standard_normal((n, d_tab)).astype("float32")
+    w = rng.standard_normal(dz).astype("float32")                 # label depends on the SHARED latent
+    y = ((Z @ w + 0.5 * rng.standard_normal(n)) > 0).astype(int)
+    return img, tab, y
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
