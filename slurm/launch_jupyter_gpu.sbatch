@@ -1,13 +1,16 @@
 #!/bin/bash
-# Launch Jupyter Lab on a Midway3 CPU (caslake) node with the shared 'aimed' kernel.
-#   sbatch slurm/launch_jupyter.sbatch        # then read logs/jupyter-<cnetid>-<jobid>.log
-#SBATCH --job-name=aimed-jupyter
+# Launch Jupyter Lab on a Midway3 GPU node with the shared 'aimed' kernel.
+# The course is CPU-only by default (use slurm/launch_jupyter.sbatch); use THIS only when
+# you specifically want a GPU (e.g. faster CNN training, or running a model live).
+#   sbatch slurm/launch_jupyter_gpu.sbatch        # then read logs/jupyter-gpu-<cnetid>-<jobid>.log
+#SBATCH --job-name=aimed-jupyter-gpu
 #SBATCH --account=workshop-aiml
-#SBATCH --partition=caslake
+#SBATCH --partition=gpu
+#SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
 #SBATCH --time=04:00:00
-#SBATCH --output=logs/jupyter-%u-%j.log
+#SBATCH --output=logs/jupyter-gpu-%u-%j.log
 set -uo pipefail
 cd "${SLURM_SUBMIT_DIR:-/project/workshop-aiml/ai_medicine_genomics}"
 source scripts/common/load_profile.sh
@@ -21,8 +24,8 @@ NODE=$(hostname -s)
 cat <<EOF
 
 ============================================================================
-  AImed Jupyter Lab
-  node=$NODE   port=$PORT   kernel='AImed'
+  AImed Jupyter Lab (GPU)
+  node=$NODE   port=$PORT   kernel='AImed'   GPU=$(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null | head -1)
 
   On YOUR LAPTOP, open an SSH tunnel:
       ssh -N -L ${PORT}:${NODE}:${PORT} ${USER}@midway3.rcc.uchicago.edu
